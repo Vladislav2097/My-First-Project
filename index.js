@@ -8,8 +8,8 @@ const statuses = {
   removed: '-',
   theSame: ' ',
   added: '+',
-  updated: ' '
-}
+  updated: ' ',
+};
 
 const genDiff = (filePath1, filePath2) => {
   let result = [];
@@ -20,53 +20,53 @@ const genDiff = (filePath1, filePath2) => {
   const objectKeys2 = Object.keys(readPath2);
   const keys = _.uniq([...objectKeys1, ...objectKeys2]);
 
-  keys.forEach(key => {
+  keys.forEach((key) => {
     if (!_.has(readPath2, key) && _.has(readPath1, key)) {
-      const value = readPath1[key]
+      const value = readPath1[key];
       const stringInfo = {
-        key: key,
-        value: value,
-        status: 'removed'
-      }
+        key,
+        value,
+        status: 'removed',
+      };
       comparedObjInfo.push(stringInfo);
-    };
+    }
     if (_.has(readPath2, key) && _.has(readPath1, key) && readPath1[key] === readPath2[key]) {
-      const value = readPath1[key]
+      const value = readPath1[key];
       const stringInfo = {
-        key: key,
-        value: value,
-        status: 'theSame'
-      }
+        key,
+        value,
+        status: 'theSame',
+      };
       comparedObjInfo.push(stringInfo);
-    };
+    }
     if (_.has(readPath2, key) && !_.has(readPath1, key)) {
-      const value = readPath2[key]
+      const value = readPath2[key];
       const stringInfo = {
-        key: key,
-        value: value,
-        status: 'added'
-      }
+        key,
+        value,
+        status: 'added',
+      };
       comparedObjInfo.push(stringInfo);
-    };
+    }
     if (_.has(readPath2, key) && _.has(readPath1, key) && (readPath1[key] !== readPath2[key])) {
-      const value1 = readPath1[key]
-      const value2 = readPath2[key]
+      const value1 = readPath1[key];
+      const value2 = readPath2[key];
       const stringInfo = {
-        key: key,
-        value1: value1,
-        value2: value2,
-        status: 'updated'
-      }
+        key,
+        value1,
+        value2,
+        status: 'updated',
+      };
       comparedObjInfo.push(stringInfo);
     }
   });
 
-  comparedObjInfo.forEach(stringInfo => {
+  comparedObjInfo.forEach((stringInfo) => {
     if (stringInfo.status === 'updated') {
       result += `${statuses.removed} ${stringInfo.key}: ${stringInfo.value1} \n`;
       result += `${statuses.added} ${stringInfo.key}: ${stringInfo.value2} \n`;
     } else {
-      result += `${statuses[stringInfo.status]} ${stringInfo.key}: ${stringInfo.value} \n`
+      result += `${statuses[stringInfo.status]} ${stringInfo.key}: ${stringInfo.value} \n`;
     }
   });
 
@@ -74,7 +74,5 @@ const genDiff = (filePath1, filePath2) => {
 
   return result;
 };
-
-
 
 export default genDiff;
