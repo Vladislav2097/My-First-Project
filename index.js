@@ -2,7 +2,10 @@ import _ from 'lodash';
 import { ok } from 'node:assert';
 import { readFileSync } from 'node:fs';
 // import _, { concat } from 'lodash';
-// import path from 'path';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import fs from 'fs';
 
 const statuses = {
   removed: '-',
@@ -10,6 +13,7 @@ const statuses = {
   added: '+',
   updated: ' ',
 };
+
 
 const genDiff = (filePath1, filePath2) => {
   let result = [];
@@ -60,7 +64,7 @@ const genDiff = (filePath1, filePath2) => {
       comparedObjInfo.push(stringInfo);
     }
   });
-
+ 
   comparedObjInfo.forEach((stringInfo) => {
     if (stringInfo.status === 'updated') {
       result += `${statuses.removed} ${stringInfo.key}: ${stringInfo.value1} \n`;
@@ -69,7 +73,7 @@ const genDiff = (filePath1, filePath2) => {
       result += `${statuses[stringInfo.status]} ${stringInfo.key}: ${stringInfo.value} \n`;
     }
   });
-
+ 
   result = `{\n${result}}`;
 
   return result;
