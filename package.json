@@ -20,7 +20,8 @@
   "dependencies": {
     "@jest/globals": "^29.3.1",
     "commander": "^9.5.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "simple-git-hooks": "^2.8.1"
   },
   "devDependencies": {
     "eslint": "^8.32.0",
