@@ -20,6 +20,7 @@
   "dependencies": {
     "@jest/globals": "^29.3.1",
     "commander": "^9.5.0",
+    "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "simple-git-hooks": "^2.8.1"
   },

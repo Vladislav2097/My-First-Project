@@ -3,58 +3,54 @@ import { ok } from 'node:assert';
 import { readFileSync } from 'node:fs';
 // import _, { concat } from 'lodash';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import fs from 'fs';
-
-const statuses = {
-  removed: '-',
-  theSame: ' ',
-  added: '+',
-  updated: ' ',
-};
+// import { fileURLToPath } from 'url';
+// import { dirname } from 'path';
+// import fs from 'fs';
+import parse from './parsers.js';
+import stylish from './__fixtures__/stylish.js';
 
 
-const genDiff = (filePath1, filePath2) => {
-  let result = [];
+const compareObjects = (object1, object2) => {
   const comparedObjInfo = [];
-  const readPath1 = JSON.parse(readFileSync(filePath1, 'utf-8'));
-  const readPath2 = JSON.parse(readFileSync(filePath2, 'utf-8'));
-  const objectKeys1 = Object.keys(readPath1);
-  const objectKeys2 = Object.keys(readPath2);
+  const objectKeys1 = Object.keys(object1);
+  const objectKeys2 = Object.keys(object2);
   const keys = _.uniq([...objectKeys1, ...objectKeys2]);
 
   keys.forEach((key) => {
-    if (!_.has(readPath2, key) && _.has(readPath1, key)) {
-      const value = readPath1[key];
+    if (_.isPlainObject(object1[key]) && _.isPlainObject(object2[key])) {
+      const stringInfo = {
+        key,
+        children: compareObjects(object1[key], object2[key]),
+        status: 'nested',
+      };
+      comparedObjInfo.push(stringInfo);
+    } else if (_.has(object2, key) && _.has(object1, key) && _.isEqual(object1[key], object2[key])) {
+      const value = object1[key];
       const stringInfo = {
         key,
         value,
-        status: 'removed',
+        status: 'unchanged',
       };
       comparedObjInfo.push(stringInfo);
-    }
-    if (_.has(readPath2, key) && _.has(readPath1, key) && readPath1[key] === readPath2[key]) {
-      const value = readPath1[key];
-      const stringInfo = {
-        key,
-        value,
-        status: 'theSame',
-      };
-      comparedObjInfo.push(stringInfo);
-    }
-    if (_.has(readPath2, key) && !_.has(readPath1, key)) {
-      const value = readPath2[key];
+    } else if (_.has(object2, key) && !_.has(object1, key)) {
+      const value = object2[key];
       const stringInfo = {
         key,
         value,
         status: 'added',
       };
       comparedObjInfo.push(stringInfo);
-    }
-    if (_.has(readPath2, key) && _.has(readPath1, key) && (readPath1[key] !== readPath2[key])) {
-      const value1 = readPath1[key];
-      const value2 = readPath2[key];
+    } else if (!_.has(object2, key) && _.has(object1, key)) {
+      const value = object1[key];
+      const stringInfo = {
+        key,
+        value,
+        status: 'deleted',
+      };
+      comparedObjInfo.push(stringInfo);
+    } else if (_.has(object2, key) && _.has(object1, key) && !_.isEqual(object1[key], object2[key])) {
+      const value1 = object1[key];
+      const value2 = object2[key];
       const stringInfo = {
         key,
         value1,
@@ -63,20 +59,23 @@ const genDiff = (filePath1, filePath2) => {
       };
       comparedObjInfo.push(stringInfo);
     }
+    
+    
+    // console.log(JSON.stringify(comparedObjInfo));
+    
   });
- 
-  comparedObjInfo.forEach((stringInfo) => {
-    if (stringInfo.status === 'updated') {
-      result += `${statuses.removed} ${stringInfo.key}: ${stringInfo.value1} \n`;
-      result += `${statuses.added} ${stringInfo.key}: ${stringInfo.value2} \n`;
-    } else {
-      result += `${statuses[stringInfo.status]} ${stringInfo.key}: ${stringInfo.value} \n`;
-    }
-  });
- 
-  result = `{\n${result}}`;
+  return comparedObjInfo;
+}
 
-  return result;
+
+const genDiff = (filePath1, filePath2) => {
+  const format1 = path.extname(filePath1);
+  const format2 = path.extname(filePath2);
+  const readPath1 = parse(readFileSync(filePath1, 'utf-8'), format1);
+  const readPath2 = parse(readFileSync(filePath2, 'utf-8'), format2);
+  const comparedObjInfo = compareObjects(readPath1, readPath2)
+
+  return stylish(comparedObjInfo);
 };
 
 export default genDiff;
