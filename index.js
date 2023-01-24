@@ -7,14 +7,16 @@ import path from 'path';
 // import { dirname } from 'path';
 // import fs from 'fs';
 import parse from './parsers.js';
-import stylish from './__fixtures__/stylish.js';
+import stylish from './formatters/stylish.js';
+import plain from './formatters/plain.js';
 
 
 const compareObjects = (object1, object2) => {
   const comparedObjInfo = [];
   const objectKeys1 = Object.keys(object1);
   const objectKeys2 = Object.keys(object2);
-  const keys = _.uniq([...objectKeys1, ...objectKeys2]);
+  const keys = _.sortBy(_.uniq([...objectKeys1, ...objectKeys2]));
+  // console.log(keys);
 
   keys.forEach((key) => {
     if (_.isPlainObject(object1[key]) && _.isPlainObject(object2[key])) {
@@ -68,14 +70,14 @@ const compareObjects = (object1, object2) => {
 }
 
 
-const genDiff = (filePath1, filePath2) => {
+const genDiff = (filePath1, filePath2, format = 'stylish') => {
   const format1 = path.extname(filePath1);
   const format2 = path.extname(filePath2);
   const readPath1 = parse(readFileSync(filePath1, 'utf-8'), format1);
   const readPath2 = parse(readFileSync(filePath2, 'utf-8'), format2);
   const comparedObjInfo = compareObjects(readPath1, readPath2)
 
-  return stylish(comparedObjInfo);
+  return stylish(compoaredObjInf);
 };
 
 export default genDiff;
