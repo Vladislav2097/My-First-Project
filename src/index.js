@@ -7,19 +7,18 @@ import plain from './formatters/plain.js';
 import json from './formatters/json.js';
 
 const compareObjects = (object1, object2) => {
-  const comparedObjInfo = [];
   const objectKeys1 = Object.keys(object1);
   const objectKeys2 = Object.keys(object2);
   const keys = _.sortBy(_.uniq([...objectKeys1, ...objectKeys2]));
 
-  keys.forEach((key) => {
+  const comparedObjInfo = keys.map((key) => {
     if (_.isPlainObject(object1[key]) && _.isPlainObject(object2[key])) {
       const stringInfo = {
         key,
         children: compareObjects(object1[key], object2[key]),
         status: 'nested',
       };
-      comparedObjInfo.push(stringInfo);
+      return stringInfo;
     } else if (_.has(object2, key) && _.has(object1, key)
               && _.isEqual(object1[key], object2[key])) {
       const value = object1[key];
@@ -28,7 +27,7 @@ const compareObjects = (object1, object2) => {
         value,
         status: 'unchanged',
       };
-      comparedObjInfo.push(stringInfo);
+      return stringInfo;
     } else if (_.has(object2, key) && !_.has(object1, key)) {
       const value = object2[key];
       const stringInfo = {
@@ -36,7 +35,7 @@ const compareObjects = (object1, object2) => {
         value,
         status: 'added',
       };
-      comparedObjInfo.push(stringInfo);
+      return stringInfo;
     } else if (!_.has(object2, key) && _.has(object1, key)) {
       const value = object1[key];
       const stringInfo = {
@@ -44,7 +43,7 @@ const compareObjects = (object1, object2) => {
         value,
         status: 'deleted',
       };
-      comparedObjInfo.push(stringInfo);
+      return stringInfo;
     } else if (_.has(object2, key) && _.has(object1, key)
               && !_.isEqual(object1[key], object2[key])) {
       const value1 = object1[key];
@@ -55,7 +54,7 @@ const compareObjects = (object1, object2) => {
         value2,
         status: 'updated',
       };
-      comparedObjInfo.push(stringInfo);
+      return stringInfo;
     }
   });
   return comparedObjInfo;
