@@ -2,9 +2,9 @@ import _ from 'lodash';
 import { readFileSync } from 'node:fs';
 import path from 'path';
 import parse from '../parsers.js';
-import stylish from './stylish.js';
-import plain from './plain.js';
-import json from './json.js';
+import stylish from './formatters/stylish.js';
+import plain from './formatters/plain.js';
+import json from './formatters/json.js';
 
 const compareObjects = (object1, object2) => {
   const comparedObjInfo = [];
