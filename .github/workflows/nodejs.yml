@@ -19,7 +19,7 @@ jobs:
       # Node versions list
       matrix:
         node-version: [18.x]
-        
+
     steps:
         # Check-out repository under GitHub workspace
         # https://github.com/actions/checkout
