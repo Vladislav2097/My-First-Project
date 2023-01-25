@@ -12,7 +12,7 @@ const stringify = (value) => {
 const plain = (objInfo) => {
   const iter = (comparedObjInfo, path) => {
     const lines = comparedObjInfo.flatMap((strInfo) => {
-      const property = path !== '' ? `${path}.${strInfo.key}`: strInfo.key;
+      const property = path !== '' ? `${path}.${strInfo.key}` : strInfo.key;
 
       if (strInfo.status === 'nested') {
         return iter(strInfo.children, property);

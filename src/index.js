@@ -19,7 +19,7 @@ const compareObjects = (object1, object2) => {
         status: 'nested',
       };
       return stringInfo;
-    } else if (_.has(object2, key) && _.has(object1, key)
+    } if (_.has(object2, key) && _.has(object1, key)
               && _.isEqual(object1[key], object2[key])) {
       const value = object1[key];
       const stringInfo = {
@@ -28,7 +28,7 @@ const compareObjects = (object1, object2) => {
         status: 'unchanged',
       };
       return stringInfo;
-    } else if (_.has(object2, key) && !_.has(object1, key)) {
+    } if (_.has(object2, key) && !_.has(object1, key)) {
       const value = object2[key];
       const stringInfo = {
         key,
@@ -36,7 +36,7 @@ const compareObjects = (object1, object2) => {
         status: 'added',
       };
       return stringInfo;
-    } else if (!_.has(object2, key) && _.has(object1, key)) {
+    } if (!_.has(object2, key) && _.has(object1, key)) {
       const value = object1[key];
       const stringInfo = {
         key,
@@ -44,7 +44,7 @@ const compareObjects = (object1, object2) => {
         status: 'deleted',
       };
       return stringInfo;
-    } else if (_.has(object2, key) && _.has(object1, key)
+    } if (_.has(object2, key) && _.has(object1, key)
               && !_.isEqual(object1[key], object2[key])) {
       const value1 = object1[key];
       const value2 = object2[key];
@@ -56,6 +56,8 @@ const compareObjects = (object1, object2) => {
       };
       return stringInfo;
     }
+
+    return 'Err';
   });
   return comparedObjInfo;
 };
