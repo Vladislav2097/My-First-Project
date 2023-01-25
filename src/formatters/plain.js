@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 const stringify = (value) => {
-  if (typeof value === 'boolean' || value === null) {
+  if (typeof value === 'boolean' || value === null || value === 0) {
     return value;
   } if (_.isPlainObject(value)) {
     return '[complex value]';
