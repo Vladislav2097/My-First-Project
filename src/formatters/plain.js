@@ -1,5 +1,14 @@
 import _ from 'lodash';
 
+const stringify = (value) => {
+  if (typeof value === 'boolean') {
+    return value;
+  } if (_.isPlainObject(value)) {
+    return '[complex value]';
+  }
+  return `'${value}'`;
+};
+
 const plain = (objInfo) => {
   const iter = (comparedObjInfo, path) => {
     const lines = comparedObjInfo.flatMap((strInfo) => {
@@ -13,25 +22,11 @@ const plain = (objInfo) => {
       if (strInfo.status === 'nested') {
         return iter(strInfo.children, property);
       } if (strInfo.status === 'added') {
-        if (_.isPlainObject(strInfo.value)) {
-          return `Property '${property}' was added with value: [complex value]`;
-        } if (strInfo.value === false) {
-          return `Property '${property}' was added with value: ${strInfo.value}`;
-        }
-        return `Property '${property}' was added with value: '${strInfo.value}'`;
+        return `Property '${property}' was added with value: ${stringify(strInfo.value)}`;
       } if (strInfo.status === 'deleted') {
         return `Property '${property}' was removed`;
       } if (strInfo.status === 'updated') {
-        if (_.isPlainObject(strInfo.value1)) {
-          return `Property '${property}' was updated. From [complex value] to '${strInfo.value2}'`;
-        } if (strInfo.value1 === true && strInfo.value2 === null) {
-          return `Property '${property}' was updated. From ${strInfo.value1} to ${strInfo.value2}`;
-        } if (strInfo.value1 === true && _.isPlainObject(strInfo.value2)) {
-          return `Property '${property}' was updated. From ${strInfo.value1} to [complex value]`;
-        } if (strInfo.value1 === null) {
-          return `Property '${property}' was updated. From ${strInfo.value1} to '${strInfo.value2}'`;
-        }
-        return `Property '${property}' was updated. From '${strInfo.value1}' to '${strInfo.value2}'`;
+        return `Property '${property}' was updated. From ${stringify(strInfo.value1)} to ${stringify(strInfo.value2)}`;
       } if (strInfo.status === 'unchanged') {
         return _.remove(strInfo);
       }
