@@ -2,6 +2,9 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "[![Actions Status](https://github.com/Vladislav2097/frontend-bootcamp-project-46/workflows/hexlet-check/badge.svg)](https://github.com/Vladislav2097/frontend-bootcamp-project-46/actions)",
+  "bin": {
+    "gendiff": "bin/gendiff.js"
+  },
   "main": "index.js",
   "type": "module",
   "scripts": {

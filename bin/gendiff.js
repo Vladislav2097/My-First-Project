@@ -1,6 +1,7 @@
+#!/usr/bin/env node
+
 import { program } from 'commander';
-import genDiff from '../index.js';
-// const _ = import('lodash');
+import genDiff from '../formatters/index.js';
 
 program
   .description('Compares two configuration files and shows a difference.')

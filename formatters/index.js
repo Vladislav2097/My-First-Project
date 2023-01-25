@@ -1,14 +1,10 @@
 import _ from 'lodash';
-import { ok } from 'node:assert';
 import { readFileSync } from 'node:fs';
-// import _, { concat } from 'lodash';
 import path from 'path';
-// import { fileURLToPath } from 'url';
-// import { dirname } from 'path';
-// import fs from 'fs';
-import parse from './parsers.js';
-import stylish from './formatters/stylish.js';
-import plain from './formatters/plain.js';
+import parse from '../parsers.js';
+import stylish from './stylish.js';
+import plain from './plain.js';
+import json from './json.js'
 
 
 const compareObjects = (object1, object2) => {
@@ -16,7 +12,6 @@ const compareObjects = (object1, object2) => {
   const objectKeys1 = Object.keys(object1);
   const objectKeys2 = Object.keys(object2);
   const keys = _.sortBy(_.uniq([...objectKeys1, ...objectKeys2]));
-  // console.log(keys);
 
   keys.forEach((key) => {
     if (_.isPlainObject(object1[key]) && _.isPlainObject(object2[key])) {
@@ -62,22 +57,29 @@ const compareObjects = (object1, object2) => {
       comparedObjInfo.push(stringInfo);
     }
     
-    
-    // console.log(JSON.stringify(comparedObjInfo));
-    
   });
   return comparedObjInfo;
 }
 
 
-const genDiff = (filePath1, filePath2, format = 'stylish') => {
+const genDiff = (filePath1, filePath2, formatName) => {
   const format1 = path.extname(filePath1);
   const format2 = path.extname(filePath2);
   const readPath1 = parse(readFileSync(filePath1, 'utf-8'), format1);
   const readPath2 = parse(readFileSync(filePath2, 'utf-8'), format2);
   const comparedObjInfo = compareObjects(readPath1, readPath2)
-
-  return stylish(compoaredObjInf);
+  switch(formatName) {
+    case 'plain':
+      return plain(comparedObjInfo);
+      break;
+    case 'json':
+      return json(comparedObjInfo);
+      break;
+    default:
+      return stylish(comparedObjInfo);
+      break;
+  }
 };
 
 export default genDiff;
+

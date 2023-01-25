@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 const keyOffset = 4;
 const prefixOffset = 2;
-const indentSymbol = '.';
+const indentSymbol = ' ';
 const openSymbol = '{';
 const closeSymbol = '}';
 const labels = {

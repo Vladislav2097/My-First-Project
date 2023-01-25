@@ -16,6 +16,8 @@ const plain = (objInfo) => {
       } else if (strInfo.status === 'added') {
           if (_.isPlainObject(strInfo.value)) {
             return `Property '${property}' was added with value: [complex value]`;
+          } else if (strInfo.value === false) {
+            return `Property '${property}' was added with value: ${strInfo.value}`;
           } else {
               return `Property '${property}' was added with value: '${strInfo.value}'`;
           }
@@ -24,6 +26,8 @@ const plain = (objInfo) => {
       } else if (strInfo.status === 'updated') {
           if (_.isPlainObject(strInfo['value1'])) {
             return `Property '${property}' was updated. From [complex value] to '${strInfo['value2']}'`;
+          } else if (strInfo.value1 === true && strInfo.value2 === null) {
+            return `Property '${property}' was updated. From ${strInfo['value1']} to ${strInfo['value2']}`;
           } else {
             return `Property '${property}' was updated. From '${strInfo['value1']}' to '${strInfo['value2']}'`;
           }
