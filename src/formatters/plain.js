@@ -26,6 +26,10 @@ const plain = (objInfo) => {
           return `Property '${property}' was updated. From [complex value] to '${strInfo.value2}'`;
         } if (strInfo.value1 === true && strInfo.value2 === null) {
           return `Property '${property}' was updated. From ${strInfo.value1} to ${strInfo.value2}`;
+        } if (strInfo.value1 === true && _.isPlainObject(strInfo.value1)) {
+          return `Property '${property}' was updated. From ${strInfo.value1} to [complex value]`;
+        } if (strInfo.value1 === null) {
+          return `Property '${property}' was updated. From ${strInfo.value1} to ${strInfo.value2}`;
         }
         return `Property '${property}' was updated. From '${strInfo.value1}' to '${strInfo.value2}'`;
       } if (strInfo.status === 'unchanged') {
