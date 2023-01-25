@@ -4,8 +4,7 @@ import path from 'path';
 import parse from '../parsers.js';
 import stylish from './stylish.js';
 import plain from './plain.js';
-import json from './json.js'
-
+import json from './json.js';
 
 const compareObjects = (object1, object2) => {
   const comparedObjInfo = [];
@@ -21,7 +20,8 @@ const compareObjects = (object1, object2) => {
         status: 'nested',
       };
       comparedObjInfo.push(stringInfo);
-    } else if (_.has(object2, key) && _.has(object1, key) && _.isEqual(object1[key], object2[key])) {
+    } else if (_.has(object2, key) && _.has(object1, key)
+              && _.isEqual(object1[key], object2[key])) {
       const value = object1[key];
       const stringInfo = {
         key,
@@ -45,7 +45,8 @@ const compareObjects = (object1, object2) => {
         status: 'deleted',
       };
       comparedObjInfo.push(stringInfo);
-    } else if (_.has(object2, key) && _.has(object1, key) && !_.isEqual(object1[key], object2[key])) {
+    } else if (_.has(object2, key) && _.has(object1, key)
+              && !_.isEqual(object1[key], object2[key])) {
       const value1 = object1[key];
       const value2 = object2[key];
       const stringInfo = {
@@ -56,30 +57,24 @@ const compareObjects = (object1, object2) => {
       };
       comparedObjInfo.push(stringInfo);
     }
-    
   });
   return comparedObjInfo;
-}
-
+};
 
 const genDiff = (filePath1, filePath2, formatName) => {
   const format1 = path.extname(filePath1);
   const format2 = path.extname(filePath2);
   const readPath1 = parse(readFileSync(filePath1, 'utf-8'), format1);
   const readPath2 = parse(readFileSync(filePath2, 'utf-8'), format2);
-  const comparedObjInfo = compareObjects(readPath1, readPath2)
-  switch(formatName) {
+  const comparedObjInfo = compareObjects(readPath1, readPath2);
+  switch (formatName) {
     case 'plain':
       return plain(comparedObjInfo);
-      break;
     case 'json':
       return json(comparedObjInfo);
-      break;
     default:
       return stylish(comparedObjInfo);
-      break;
   }
 };
 
 export default genDiff;
-

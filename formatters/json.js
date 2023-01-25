@@ -1,5 +1,3 @@
-const json = (objInfo) => {
-  return JSON.stringify(objInfo);
-}
+const json = (objInfo) => JSON.stringify(objInfo);
 
 export default json;

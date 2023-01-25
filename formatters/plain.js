@@ -2,45 +2,44 @@ import _ from 'lodash';
 
 const plain = (objInfo) => {
   const iter = (comparedObjInfo, path) => {
-    let lines = comparedObjInfo.flatMap((strInfo) => { 
+    const lines = comparedObjInfo.flatMap((strInfo) => {
       let property = '';
       if (path !== '') {
-        property = `${path}.${strInfo['key']}`
+        property = `${path}.${strInfo.key}`;
       } else {
-        property = strInfo['key'];
-        
+        property = strInfo.key;
       }
-      
+
       if (strInfo.status === 'nested') {
-        return iter(strInfo.children, property)
-      } else if (strInfo.status === 'added') {
-          if (_.isPlainObject(strInfo.value)) {
-            return `Property '${property}' was added with value: [complex value]`;
-          } else if (strInfo.value === false) {
-            return `Property '${property}' was added with value: ${strInfo.value}`;
-          } else {
-              return `Property '${property}' was added with value: '${strInfo.value}'`;
-          }
-      } else if (strInfo.status === 'deleted') {
-          return `Property '${property}' was removed`;
-      } else if (strInfo.status === 'updated') {
-          if (_.isPlainObject(strInfo['value1'])) {
-            return `Property '${property}' was updated. From [complex value] to '${strInfo['value2']}'`;
-          } else if (strInfo.value1 === true && strInfo.value2 === null) {
-            return `Property '${property}' was updated. From ${strInfo['value1']} to ${strInfo['value2']}`;
-          } else {
-            return `Property '${property}' was updated. From '${strInfo['value1']}' to '${strInfo['value2']}'`;
-          }
-      } else if (strInfo.status === 'unchanged') {
+        return iter(strInfo.children, property);
+      } if (strInfo.status === 'added') {
+        if (_.isPlainObject(strInfo.value)) {
+          return `Property '${property}' was added with value: [complex value]`;
+        } if (strInfo.value === false) {
+          return `Property '${property}' was added with value: ${strInfo.value}`;
+        }
+        return `Property '${property}' was added with value: '${strInfo.value}'`;
+      } if (strInfo.status === 'deleted') {
+        return `Property '${property}' was removed`;
+      } if (strInfo.status === 'updated') {
+        if (_.isPlainObject(strInfo.value1)) {
+          return `Property '${property}' was updated. From [complex value] to '${strInfo.value2}'`;
+        } if (strInfo.value1 === true && strInfo.value2 === null) {
+          return `Property '${property}' was updated. From ${strInfo.value1} to ${strInfo.value2}`;
+        }
+        return `Property '${property}' was updated. From '${strInfo.value1}' to '${strInfo.value2}'`;
+      } if (strInfo.status === 'unchanged') {
         return _.remove(strInfo);
       }
-    })
+
+      return 'Err';
+    });
     return lines;
   };
-  
+
   return [
     ...iter(objInfo, ''),
-  ].join('\n')
+  ].join('\n');
 };
 
 export default plain;
