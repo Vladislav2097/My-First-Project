@@ -41,13 +41,21 @@ const stylish = (objInfo) => {
           ...iter(strInfo.children, depth + 1),
           `${bracketIndent}}`,
         ].join('\n')}`;
-      } if (strInfo.status === 'added') {
+      }
+
+      if (strInfo.status === 'added') {
         return `${addPrefix(strInfo.key, strInfo.status, keyIndent)}: ${stringify(strInfo.value, depth + 1)}`;
-      } if (strInfo.status === 'deleted') {
+      }
+
+      if (strInfo.status === 'deleted') {
         return `${addPrefix(strInfo.key, strInfo.status, keyIndent)}: ${stringify(strInfo.value, depth + 1)}`;
-      } if (strInfo.status === 'unchanged') {
+      }
+
+      if (strInfo.status === 'unchanged') {
         return `${addPrefix(strInfo.key, strInfo.status, keyIndent)}: ${stringify(strInfo.value, depth + 1)}`;
-      } if (strInfo.status === 'updated') {
+      }
+
+      if (strInfo.status === 'updated') {
         const revovedStr = `${addPrefix(strInfo.key, 'deleted', keyIndent)}: ${stringify(strInfo.value1, depth + 1)}`;
         const addedStr = `${addPrefix(strInfo.key, 'added', keyIndent)}: ${stringify(strInfo.value2, depth + 1)}`;
         return `${revovedStr}\n${addedStr}`;

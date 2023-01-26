@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { readFileSync } from 'node:fs';
 import path from 'path';
-import parse from '../parsers.js';
+import parse from './parsers.js';
 import stylish from './formatters/stylish.js';
 import plain from './formatters/plain.js';
 import json from './formatters/json.js';
@@ -13,52 +13,56 @@ const compareObjects = (object1, object2) => {
 
   const comparedObjInfo = keys.map((key) => {
     if (_.isPlainObject(object1[key]) && _.isPlainObject(object2[key])) {
-      const stringInfo = {
+      return {
         key,
         children: compareObjects(object1[key], object2[key]),
         status: 'nested',
       };
-      return stringInfo;
-    } if (_.has(object2, key) && _.has(object1, key)
+    }
+
+    if (_.has(object2, key) && _.has(object1, key)
               && _.isEqual(object1[key], object2[key])) {
       const value = object1[key];
-      const stringInfo = {
+      return {
         key,
         value,
         status: 'unchanged',
       };
-      return stringInfo;
-    } if (_.has(object2, key) && !_.has(object1, key)) {
+    }
+
+    if (_.has(object2, key) && !_.has(object1, key)) {
       const value = object2[key];
-      const stringInfo = {
+      return {
         key,
         value,
         status: 'added',
       };
-      return stringInfo;
-    } if (!_.has(object2, key) && _.has(object1, key)) {
+    }
+
+    if (!_.has(object2, key) && _.has(object1, key)) {
       const value = object1[key];
-      const stringInfo = {
+      return {
         key,
         value,
         status: 'deleted',
       };
-      return stringInfo;
-    } if (_.has(object2, key) && _.has(object1, key)
+    }
+
+    if (_.has(object2, key) && _.has(object1, key)
               && !_.isEqual(object1[key], object2[key])) {
       const value1 = object1[key];
       const value2 = object2[key];
-      const stringInfo = {
+      return {
         key,
         value1,
         value2,
         status: 'updated',
       };
-      return stringInfo;
     }
 
     return 'Err';
   });
+
   return comparedObjInfo;
 };
 
