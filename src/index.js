@@ -60,15 +60,15 @@ const compareObjects = (object1, object2) => {
       };
     }
 
-    return 'Err';
+    throw new Error('не подходит не под одно условие');
   });
 
   return comparedObjInfo;
 };
 
 const genDiff = (filePath1, filePath2, formatName) => {
-  const format1 = path.extname(filePath1);
-  const format2 = path.extname(filePath2);
+  const format1 = path.extname(filePath1).slice(1);
+  const format2 = path.extname(filePath2).slice(1);
   const readPath1 = parse(readFileSync(filePath1, 'utf-8'), format1);
   const readPath2 = parse(readFileSync(filePath2, 'utf-8'), format2);
   const comparedObjInfo = compareObjects(readPath1, readPath2);

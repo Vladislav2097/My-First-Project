@@ -61,7 +61,7 @@ const stylish = (objInfo) => {
         return `${revovedStr}\n${addedStr}`;
       }
 
-      return 'Err';
+      throw new Error('не известный формат');
     });
 
     return lines;

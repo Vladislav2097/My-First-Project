@@ -37,7 +37,7 @@ const plain = (objInfo) => {
         return _.remove(strInfo);
       }
 
-      return 'Err';
+      throw new Error('не известный формат');
     });
 
     return lines;
